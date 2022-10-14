@@ -1,0 +1,52 @@
+<head>
+	<title>Đăng ký</title>
+</head>
+<body>
+	<div class="box-login">
+	<div class="title_name">
+		<div class="d-flex justify-content-center">
+			<h3 style="color:#4C3876 ;margin-top:0px;font-weight: 800;font-size: 35px;" >Đăng ký</h3>
+		</div>
+	</div>
+	<div class="form_login">
+		<form method="POST" action="">
+			{% csrf_token %}
+			<div class="form-outline">
+				<label class="form-label" for="form2Example27">Email</label>
+				{{form.email}}
+			</div>
+            <div class="form-outline">
+				<label class="form-label" for="form2Example17">Mật khẩu</label>
+				{{form.password1}}
+			</div>
+
+			<div class="form-outline">
+				<label class="form-label" for="form2Example27">Nhập lại mật khẩu</label>
+				{{form.password2}}
+			</div>
+			<div class="support-login">
+				<p class="small text-muted"> <a href="{%url 'login' %}" style="color: #393f81;">Đã có tài khoản? Đăng nhập</a></p>
+			</div>	
+
+			<div class="button-login">
+				<input class="btn btn-block" type="submit" style="background-color: #4C3876; color: white;" value="Tạo tài khoản">
+			</div>
+			
+		</form>
+
+	</div>
+    {{form.errors}}
+</div>
+<script>
+						
+        var form_fields = document.getElementsByTagName('input')
+		form_fields[1].placeholder='Email..';
+		form_fields[2].placeholder='Nhập mật khẩu...';
+		form_fields[3].placeholder='Nhập lại mật khẩu...';
+
+    for (var field in form_fields){	
+        form_fields[field].className += ' form-control'
+    }
+</script>
+
+</body>

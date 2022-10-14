@@ -1,0 +1,52 @@
+<head>
+	<title>Đăng nhập</title>
+</head>
+<body>
+
+
+<div class="box-login">
+	<div class="title_name">
+		<div class="d-flex justify-content-center">
+			<h3 style="color:#4C3876 ;margin-top:50px;font-weight: 800;font-size: 35px;" >Đăng nhập</h3>
+		</div>
+	</div>
+	<div class="form_login">
+		<form method="POST" action="">
+			{% csrf_token %}
+			<div class="form-outline">
+				<label class="form-label" for="form2Example17">Email</label>
+				<input type="text" name="username" class="form-control" />
+			</div>
+
+			<div class="form-outline">
+				<label class="form-label" for="form2Example27">Mật khẩu</label>
+				<input type="password" name="password" class="form-control" />
+			</div>
+			<div class="support-login">
+				<p class="small text-muted"> <a href="#" style="color: #393f81;">Quên mật khẩu?</a> </p>
+				<p class="small text-muted"> <a href="{%url 'register' %}" style="color: #393f81;">Chưa có tài khoản? Đăng ký</a></p>
+			</div>	
+
+			<div class="button-loginnn">
+				<input class="btn btn-block" type="submit" style="background-color: #4C3876; color:white;" value="Đăng nhập">
+			</div>
+		{% if messages %}
+		{% for message in messages %}
+		<div class="alert {{ message.tags }} alert-dismissible" role="alert">
+			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+			</button>
+			{{ message }}
+		</div>
+		{% endfor %}
+		{% endif %}		
+		</form>
+
+	</div>
+
+</div>
+
+
+</body>
+
+</html>
