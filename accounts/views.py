@@ -33,7 +33,8 @@ def loginPage(request):
 
         email = request.POST.get('email')
         password = request.POST.get('password')
-
+        print(email)
+        print(password)
         user = authenticate(request, email=email, password=password)
 
         if email == '':
@@ -57,4 +58,4 @@ def logoutUser(request):
     return redirect('login')
 
 def dashboard(request):
-	return redirect('dashboard')
+	return render(request, 'pages/dashboard.html')
