@@ -33,9 +33,9 @@ class CustomUser(AbstractUser):
     birth = models.DateField(null=True)
     phone = models.CharField(max_length=200)
     address = models.CharField(max_length=200, blank=True)
-    passphase = models.CharField(max_length=200, null=False, blank=False)
-    # private_key = models.BinaryField()
-    # public_key = models.BinaryField()
+    passphrase = models.CharField(max_length=200, null=False, blank=False)
+    private_key = models.BinaryField(null=True, blank=True)
+    public_key = models.BinaryField(null=True, blank=True)
 
     objects = CustomUserManager()
         

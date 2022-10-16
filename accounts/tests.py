@@ -9,7 +9,9 @@ class EncryptionTest(TestCase):
 
         key = generate_rsa_key()
         cipherkey, tag, nonce = encrypt_rsa_private_key(passphrase,key.export_key())
+        
         cstr = concanate_nonce_tag_cipherkey(cipherkey, tag, nonce)
+
         cipherkey, tag, nonce = slide_nonce_tag_cipherkey(cstr)
         key_decrypt = decrypt_rsa_private_key(passphrase, cipherkey, tag, nonce)
         

@@ -87,7 +87,7 @@ if __name__ == '__main__':
    key = RSA.generate(2048)
    # print(type(key))
    private_key = key.export_key()
-
+   print(type(key.public_key().export_key()))
    #Encrypt RSA private key 
    #Using AES, passphrase = user input
    ## Get aes private key using hashed passphrase for encryption 
