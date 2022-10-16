@@ -12,12 +12,15 @@ def register(request):
         form = CreateCustomUserForm(request.POST)
 
         if form.is_valid():
-
             user = form.save()
 
-            # key = generate_rsa_key()
-            # cipherkey, tag, nonce = encrypt_rsa_private_key(user.passphrase,key.export_key())
+            key = generate_rsa_key()
+            cipherkey, tag, nonce = encrypt_rsa_private_key(user.passphrase,key.export_key())
+            
+            user.private_key = concanate_nonce_tag_cipherkey(cipherkey, tag, nonce)
+            user.public_key = key.public_key().export_key()
 
+            user.save()
             #group = Group.objects.get(name='custom_user')
 
             #if group == None:
