@@ -78,7 +78,7 @@ def send_file(request):
                 rec = CustomUser.objects.get(email=rec_email)
             else:
                 messages.error(request, 'Không có người nhận với email này.')
-                return redirect('upload')
+                return redirect('send_file')
 
             file = form.save(commit=False)
             file.receiver = rec
