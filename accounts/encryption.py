@@ -25,16 +25,59 @@ def slide_nonce_tag_cipherkey(cstr: bytes):
    nonce, tag, cipherkey = cstr[0:16], cstr[16:32], cstr[32:]
    return cipherkey, tag, nonce
 
-def decrypt_rsa_private_key(passphrase: str, cipherkey: bytes, tag: bytes, nonce:bytes) -> RSA.RsaKey:
+def decrypt_rsa_private_key(passphrase: str, cipherkey: bytes, tag: bytes, nonce:bytes) -> bytes:
    aes_privatekey = AES.new(hashlib.sha256(passphrase.encode()).digest(), AES.MODE_EAX, nonce)
    private_key = aes_privatekey.decrypt_and_verify(cipherkey, tag)
-   return RSA.import_key(private_key)
+   return private_key
 
-def encrypt_file(file_path):
-   pass
+def encrypt_file(file_path: str, key: bytes):
+   with open(file_path, "rb") as file_in:
+      data = file_in.read()
+   #read public key from file
+   recipient_key = RSA.import_key(key)
+   #generate aes session key
+   session_key = get_random_bytes(16)
 
-def decrypt_file(file_path):
-   pass
+   # Encrypt session key with the public RSA key
+   cipher_rsa = PKCS1_OAEP.new(recipient_key)
+   enc_session_key = cipher_rsa.encrypt(session_key)
+   # Encrypt data with the AES session key
+   # get key
+   cipher_aes = AES.new(session_key, AES.MODE_EAX)
+   # encrypt
+   ciphertext, tag = cipher_aes.encrypt_and_digest(data)
+   # write to file
+   file_out = open(file_path+".bin", "wb")
+   [ file_out.write(x) for x in (enc_session_key, cipher_aes.nonce, tag, ciphertext) ]
+   file_out.close()
+   return file_path+".bin"
+
+def decrypt_file(file_path: str, key: bytes):
+   # open cipher text
+   file_in = open(file_path, "rb")
+
+   # read private key from file
+   private_key = RSA.import_key(key)
+
+   # read from file
+   enc_session_key, nonce, tag, ciphertext = \
+      [ file_in.read(x) for x in (private_key.size_in_bytes(), 16, 16, -1) ]
+   file_in.close()
+
+   # Decrypt the session key with the private RSA key
+   cipher_rsa = PKCS1_OAEP.new(private_key)
+   session_key = cipher_rsa.decrypt(enc_session_key)
+
+   # Decrypt the data with the AES session key
+   cipher_aes = AES.new(session_key, AES.MODE_EAX, nonce)
+   data = cipher_aes.decrypt_and_verify(ciphertext, tag)
+   # write to file
+   file_path = file_path.replace(".bin","")
+   file_out = open(file_path, "wb")
+   file_out.write(data)
+   file_out.close()
+   return file_path
+
 
 if __name__ == '__main__':
    debug = True
