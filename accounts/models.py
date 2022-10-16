@@ -34,8 +34,17 @@ class CustomUser(AbstractUser):
     phone = models.CharField(max_length=200)
     address = models.CharField(max_length=200, blank=True)
     passphase = models.CharField(max_length=200, null=False, blank=False)
+    # private_key = models.BinaryField()
+    # public_key = models.BinaryField()
 
     objects = CustomUserManager()
         
     def __str__(self):
         return self.email
+
+    def save(self, force_insert=False, force_update=False, using=None, 
+            update_fields=None) -> None:
+        
+        
+        return super().save(force_insert, force_update, using, update_fields)
+

@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from .models import *
 from .forms import *
+from .encryption import *
 
 def register(request):
     form = CreateCustomUserForm()
@@ -13,6 +14,9 @@ def register(request):
         if form.is_valid():
 
             user = form.save()
+
+            # key = generate_rsa_key()
+            # cipherkey, tag, nonce = encrypt_rsa_private_key(user.passphrase,key.export_key())
 
             #group = Group.objects.get(name='custom_user')
 
@@ -33,8 +37,6 @@ def loginPage(request):
 
         email = request.POST.get('email')
         password = request.POST.get('password')
-        print(email)
-        print(password)
         user = authenticate(request, email=email, password=password)
 
         if email == '':
