@@ -4,7 +4,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from .models import *
 from .forms import *
-#from .encryption import *
+from .encryption import *
 
 def register(request):
     form = CreateCustomUserForm()
