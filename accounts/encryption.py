@@ -2,13 +2,12 @@ from Crypto.PublicKey import RSA
 from Crypto.Random import get_random_bytes
 from Crypto.Cipher import AES, PKCS1_OAEP
 import hashlib
-from typing import Tuple
 
 def generate_rsa_key():
    key = RSA.generate(2048)
    return key
 
-def encrypt_rsa_private_key(passphrase: str, rsa_private_key: bytes) -> Tuple[bytes, bytes, bytes]:
+def encrypt_rsa_private_key(passphrase: str, rsa_private_key: bytes):
    # Encrypt RSA private key
    # Using AES, passphrase = user input
    ## Get aes private key using hashed passphrase for encryption 
