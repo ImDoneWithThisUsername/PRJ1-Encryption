@@ -41,3 +41,12 @@ class CustomUser(AbstractUser):
         
     def __str__(self):
         return self.email
+
+def user_directory_path(instance, filename):
+    # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
+    return 'user_{0}/{1}'.format(instance.user.id, filename)
+
+class Document(models.Model):
+    document = models.FileField(upload_to=user_directory_path)
+    sender = models.ForeignKey(CustomUser, null=True, on_delete=models.SET_NULL, blank=True)
+    uploaded_at = models.DateTimeField(auto_now_add=True)
