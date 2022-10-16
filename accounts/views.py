@@ -1,9 +1,10 @@
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from .models import *
 from .forms import *
-from .encryption import *
+#from .encryption import *
 
 def register(request):
     form = CreateCustomUserForm()
@@ -61,3 +62,23 @@ def logoutUser(request):
 
 def dashboard(request):
 	return render(request, 'pages/dashboard.html')
+
+def upload_file(request):
+    if request.method == 'POST':
+        form = UploadFileForm(request.POST, request.FILES)
+
+        email = request.POST.get("email", "")
+        print(email)
+        user = User.objects.filter(email=email).exists()
+        print(user)
+        if form.is_valid():
+            file = form.save()
+
+            if user is True:
+                user = User.objects.get(email=email)
+                file.sender = user
+
+            return HttpResponseRedirect('dashboard')
+    else:
+        form = UploadFileForm()
+    return render(request, 'pages/upload.html', {'form': form})

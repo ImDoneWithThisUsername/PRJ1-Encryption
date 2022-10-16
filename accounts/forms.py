@@ -1,7 +1,13 @@
 from django.contrib.auth.forms import UserCreationForm
+from django import forms
 from .models import *
 
 class CreateCustomUserForm(UserCreationForm):
     class Meta:
         model = CustomUser
         fields = ['email', 'password1', 'password2']
+
+class UploadFileForm(forms.ModelForm):
+    class Meta:
+        model = Document
+        fields = ['document']
