@@ -7,7 +7,7 @@ def generate_rsa_key():
    key = RSA.generate(2048)
    return key
 
-def encrypt_rsa_private_key(passphrase: str, rsa_private_key: bytes) -> tuple[bytes, bytes, bytes]:
+def encrypt_rsa_private_key(passphrase: str, rsa_private_key: bytes):
    # Encrypt RSA private key
    # Using AES, passphrase = user input
    ## Get aes private key using hashed passphrase for encryption 
