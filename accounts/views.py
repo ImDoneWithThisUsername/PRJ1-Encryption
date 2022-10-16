@@ -66,22 +66,26 @@ def logoutUser(request):
 def dashboard(request):
 	return render(request, 'pages/dashboard.html')
 
-def upload_file(request):
+def send_file(request):
     if request.method == 'POST':
         form = UploadFileForm(request.POST, request.FILES)
 
-        email = request.POST.get("email", "")
-        print(email)
-        user = User.objects.filter(email=email).exists()
-        print(user)
         if form.is_valid():
-            file = form.save()
+            rec_email = request.POST['receiver']
+            rec = CustomUser.objects.filter(email=rec_email).exists()
 
-            if user is True:
-                user = User.objects.get(email=email)
-                file.sender = user
+            if rec is True:
+                rec = CustomUser.objects.get(email=rec_email)
+            else:
+                messages.error(request, 'Không có người nhận với email này.')
+                return redirect('send_file')
 
-            return HttpResponseRedirect('dashboard')
+            file = form.save(commit=False)
+            file.receiver = rec
+            file.sender = request.user
+
+            file.save()
+            return redirect('dashboard')
     else:
         form = UploadFileForm()
-    return render(request, 'pages/upload.html', {'form': form})
+    return render(request, 'pages/send_file.html', {'form': form})

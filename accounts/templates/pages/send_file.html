@@ -1,10 +1,10 @@
 {% block content %}
   <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
-    <input type="text" name="receiver">
+    <b>Nhập email người nhận: </b><input type="text" name="receiver">
     {{ form.as_p }}
-    <button type="submit">Send</button>
+    <button type="submit">Gửi</button>
   </form>
 
-  <p><a href="{% url 'dashboard' %}">Return to dashboard</a></p>
+  <p><a href="{% url 'dashboard' %}">Trở về trang chủ</a></p>
 {% endblock %}
