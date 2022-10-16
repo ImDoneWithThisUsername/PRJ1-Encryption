@@ -42,12 +42,6 @@ class CustomUser(AbstractUser):
     def __str__(self):
         return self.email
 
-    def save(self, force_insert=False, force_update=False, using=None, 
-            update_fields=None) -> None:
-        
-        
-        return super().save(force_insert, force_update, using, update_fields)
-
 def user_directory_path(instance, filename):
     # file will be uploaded to MEDIA_ROOT/user_<id>/<filename>
     return 'user_{0}/{1}'.format(instance.user.id, filename)
