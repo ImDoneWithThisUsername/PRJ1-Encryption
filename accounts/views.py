@@ -22,13 +22,6 @@ def register(request):
             user.public_key = key.public_key().export_key()
 
             user.save()
-            #group = Group.objects.get(name='custom_user')
-
-            #if group == None:
-            #    raise ValueError('Chưa có group custom_user')
-
-            #user.groups.add(group)
-
             messages.success(request, 'Tạo tài khoản thành công.')
             return redirect('login')
 
@@ -68,13 +61,12 @@ def dashboard(request):
     user = CustomUser.objects.get(email=email)
     files = Document.objects.filter(receiver=user)
     context = {
-
         'files':files
     }
 
     return render(request, 'pages/dashboard.html', context)
 
-def send_file(request):
+def sendFile(request):
     if request.method == 'POST':
         form = UploadFileForm(request.POST, request.FILES)
 
@@ -98,3 +90,19 @@ def send_file(request):
     else:
         form = UploadFileForm()
     return render(request, 'pages/send_file.html', {'form': form})
+
+def changeInfo(request):
+    #autofill
+    user = request.user
+    form = ChangeCustomUserForm(instance=user)
+    #submit
+    if request.method == 'POST':
+        form = ChangeCustomUserForm(request.POST, instance=user)
+
+    if form.is_valid():
+            form.save()
+            messages.success(request,'Thay đổi thông tin thành công')
+            return redirect('change_info')
+
+    context = {'form':form}
+    return render(request, 'pages/change_info.html', context)

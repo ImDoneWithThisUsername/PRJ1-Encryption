@@ -11,3 +11,8 @@ class UploadFileForm(forms.ModelForm):
     class Meta:
         model = Document
         fields = ['document']
+
+class ChangeCustomUserForm(forms.ModelForm):
+    class Meta:
+        model = CustomUser
+        fields = ['name', 'birth', 'phone', 'address', 'passphrase']

@@ -1,0 +1,85 @@
+{% extends 'pages/main.html' %}
+{% load static %}
+
+{% block style %}
+.form{
+    margin: auto;
+    margin-top:10px;
+    padding: 40px 50px;
+    width: 35%;
+    background: #dbb7fd ;
+    border-radius:10px;
+}
+.title_name{
+    color:#4C3876 ;
+    margin-bottom: 20px;
+    font-weight: 800;
+    font-size: 30px;
+    text-align:center;
+}
+.col-12{
+    margin-top: 30px;
+}
+{% endblock style %}
+
+{% block content %}
+{% if messages %}
+{% for message in messages %}
+  <div class="alert {{ message.tags }} alert-dismissible" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    {{ message }}
+  </div>
+{% endfor %}
+{% endif %}
+<div class="form">
+    <div class="title_name">
+		<div class="d-flex justify-content-center">
+			<h4>Cập nhật thông tin tài khoản</h4>
+		</div>
+	</div>
+    <form method="POST" action="" class="row g-3">
+			{% csrf_token %}
+			<div class="form-outline">
+				<label class="form-label" for="name"><b>Họ tên</b></label>
+				{{form.name}}
+			</div>
+
+			<div class="form-outline">
+				<label class="form-label" for="birth"><b>Ngày sinh</b></label>
+				{{form.birth}}
+			</div>
+
+            <div class="form-outline">
+				<label class="form-label" for="phone"><b>Điện thoại</b></label>
+				{{form.phone}}
+			</div>
+
+			<div class="form-outline">
+				<label class="form-label" for="address"><b>Địa chỉ</b></label>
+				{{form.address}}
+			</div>
+
+			<div class="form-outline">
+				<label class="form-label" for="passphrase"><b>Passphrase</b></label>
+				{{form.passphrase}}
+			</div>
+
+            <div style="margin-top:30px;">
+                <input class="btn btn-primary" type="submit" name="update" value="Cập nhật">
+            </div>           
+    </form>
+</div>
+
+<script>
+						
+    var form_fields = document.getElementsByTagName('input')
+
+    for (var field in form_fields){	
+        form_fields[field].className += ' form-control'
+
+    }
+</script>
+
+{% endblock content %}

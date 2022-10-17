@@ -30,13 +30,12 @@
   <form class="row g-3" method="POST" action="" enctype="multipart/form-data" style="margin-top: 30px;">
     {% csrf_token %}
     <div class="form-outline" >
-      <label for="form2Example17" class="form-label" >Nhập email người nhận</label>
+      <label for="form2Example17" class="form-label" >Nhập email người nhận:</label>
       <input type="text" name="receiver" required style="margin-left: 10px; width:40%;">
     </div>
     {{ form.as_p }}
     <div style="height:200px">
-      <a href="{% url 'dashboard' %}" class="btn btn-primary trigger-btn" style="margin-right:50px">Trở về trang chủ</a>
-      <input class="btn btn-primary trigger-btn" type="submit" name="update" value="Gửi" style="margin-left:50px">
+      <input class="btn btn-primary trigger-btn" style="font-size:18px; width: 100px;" type="submit" name="update" value="Gửi">
     </div>
   </form>
 </div>  

@@ -30,11 +30,12 @@ class CustomUser(AbstractUser):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 
-    name = models.CharField(max_length=200)
-    birth = models.DateField(null=True)
-    phone = models.CharField(max_length=200)
+    name = models.CharField(max_length=200, blank=True)
+    birth = models.DateField(null=True, blank=True)
+    phone = models.CharField(max_length=200, blank=True)
     address = models.CharField(max_length=200, blank=True)
-    passphrase = models.CharField(max_length=200, null=False, blank=False)
+    passphrase = models.CharField(max_length=200, null=False, blank=True)
+    
     private_key = models.BinaryField(null=True, blank=True)
     public_key = models.BinaryField(null=True, blank=True)
 
