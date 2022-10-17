@@ -30,7 +30,7 @@
         <td>{{i.filename}}</td>
         <td>{{i.sender}}</td>
         <td>{{i.sent_at|date:'d-m-Y'}}</td>
-        <td><button class="btn"><i class="fa fa-download"></i></button></td>
+        <td><a href="{{i.document.url}}" download=""><button class="btn"><i class="fa fa-download"></i></button></a></td>
     </tr>   
     {% endfor %}
     {% endblock table_body %}

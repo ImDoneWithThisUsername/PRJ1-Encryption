@@ -67,8 +67,6 @@ def dashboard(request):
     email = request.user
     user = CustomUser.objects.get(email=email)
     files = Document.objects.filter(receiver=user)
-    for i in files:
-        print(i.filename)
     context = {
 
         'files':files
