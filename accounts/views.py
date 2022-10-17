@@ -64,7 +64,17 @@ def logoutUser(request):
     return redirect('login')
 
 def dashboard(request):
-	return render(request, 'pages/dashboard.html')
+    email = request.user
+    user = CustomUser.objects.get(email=email)
+    files = Document.objects.filter(receiver=user)
+    for i in files:
+        print(i.filename)
+    context = {
+
+        'files':files
+    }
+
+    return render(request, 'pages/dashboard.html', context)
 
 def send_file(request):
     if request.method == 'POST':
@@ -85,7 +95,8 @@ def send_file(request):
             file.sender = request.user
 
             file.save()
-            return redirect('dashboard')
+            messages.success(request, 'Gửi file thành công.')
+            return redirect('send_file')
     else:
         form = UploadFileForm()
     return render(request, 'pages/send_file.html', {'form': form})

@@ -1,3 +1,5 @@
+{% extends 'pages/table_form.html' %}
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,6 +9,30 @@
     <title>Trang chủ</title>
 </head>
 <body>
-    <b>Trang chủ</b>
+    {% block title_name %}
+        <p>Danh sách file đã nhận</p>
+    {% endblock title_name %}
+
+
+    {% block table_head %}
+    <tr>
+        <th>File</th>
+        <th>Người gửi</th>
+        <th>Ngày gửi</th>
+        <th>Tải về</th>
+    </tr>
+
+    {% endblock table_head %}
+    {% block table_body %}
+
+    {% for i in files %}
+    <tr>
+        <td>{{i.filename}}</td>
+        <td>{{i.sender}}</td>
+        <td>{{i.sent_at|date:'d-m-Y'}}</td>
+        <td><button class="btn"><i class="fa fa-download"></i></button></td>
+    </tr>   
+    {% endfor %}
+    {% endblock table_body %}
 </body>
 </html>

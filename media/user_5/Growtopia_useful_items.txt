@@ -1,0 +1,27 @@
+Super Pineapple Guardian Charm - When activated, grants immunity to thrown consumables for 5 seconds (starts as soon as you get hit), followed by a 30-minute cooldown.
+
+Rock Hammer - It looks like an ordinary hammer for collecting fossils, but it has a heart bow effect when attacking, it will pull the player instead of punching them away!
+
+Heroic Tights of Prevention - Prevent you from picking up floating items in the world!
+
+Demonic Arm - Allows the player to punch further and break blocks faster.
+
+Astro Shades - Item for the face, which allows you to break blocks faster.
+
+Amber Necklace - It gives you 5% chance to get double fossil!
+
+Luminous Eyes - Increases the chance of finding crystals by 2.5%!
+
+Zraei's Dragoscarf - Most popular neck item with enhanced digger mod, the other interesting thing is its purple flame that doesn't replace your punch animation, so if you get a Playful Sprite, Dragon, Burning Hands etc, you can shoot 2 or more beams of flame!
+
+Harvest Moon Charm - Increases the drop chance of Balance Mooncakes durning Harvest Fest.
+
+Dreamcatcher Staff - 2% chance of getting extra blocks from harvesting trees!
+
+Buddy Block Head - Gives you a chance of dropping an additional block when breaking blocks!
+
+Harvster - Gives a 10% chance to double the fruits earned from a harvested tree while a Fuel Pack is equipped. During a Harvest Festival, harvesting trees while equipping a Harvester and a Fuel Pack may result in a Soul Harvester Mask, Hay or Tea Set being dropped.
+
+Harvester Of Sorrows - When used with an Ecto Pack, it also has the chance to drop Devilfruits or Teeny Tiny Skulls, while working like regular Fuel Packs. Other features are the same as for Harvster.
+
+Magic Magnet - You can choose 1 item that you can pick up, the rest of the items will not be picked up even with free space in your inventory.

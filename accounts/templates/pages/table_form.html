@@ -1,0 +1,149 @@
+{% extends 'pages/main.html' %}
+{% load static %}
+
+{% block style %}
+	table {
+		font-family: arial, sans-serif;
+		border-collapse: collapse;
+		width: 100%;
+	}
+	thead{
+		background-color:black;
+		color:white;
+	}
+	th {
+		border: 1px solid #dddddd;
+		text-align: center;
+		padding: 8px;
+		background-color: white;
+	}
+	
+	td {
+		border: 1px solid #dddddd;
+		text-align: left;
+		padding: 8px;
+		background-color: white;
+	}
+
+	tbody{
+		background-color: white;
+	}
+	.title_button{
+		display: flex;
+		flex-direction:row;
+		justify-content:space-between;
+	}
+	.list_item{
+		width: 100%;
+		margin: auto;
+		margin-top:50px;
+	}
+    .line_info{
+        width:70%;
+        margin:auto;
+        display:flex;
+        flex-direction:row;
+		justify-content:space-between;
+
+    }
+    .infor_title{
+        display:flex;
+        flex-direction:row;
+
+    }
+    .infor_title_name{
+        color: #351F63;
+        font-weight:700;
+        font-size:20px;
+    }
+    .text_item{
+        margin-left: 10px;
+        margin-top: 5px;
+    }
+    {% block style_extra %}
+    {% endblock %}
+
+    .btn{
+    	background-color: DodgerBlue;
+  		border: none;
+  		color: white;
+  		cursor: pointer;
+        margin-left:38%;
+    }
+
+    .btn:hover {
+  		background-color: RoyalBlue;
+	}
+
+{% endblock style %}
+{% block content %}
+
+
+<div class="list_item">
+
+
+	<div class="title_button" >
+
+		<div class="list_name_title">
+            {% block title_name %}
+            {% endblock %}
+		</div>
+        {% block button %}
+        {% endblock %}
+
+	</div>
+	{% block filter %}{% endblock filter %}
+
+	 <div class="line_info" >
+        {% block line_info %}
+        {% endblock %}
+
+    </div>
+
+	<div class="table_list_item">
+		<table class="table">
+			<thead class="thead-dark">
+				
+                {% block table_head %}
+                {% endblock %}
+
+			</thead>
+			<tbody>
+                {% block table_body %}
+                {% endblock %}
+			</tbody>
+		</table>
+	</div>
+	
+
+	<div class="title_button" >
+
+		<div class="list_name_title">
+			{% block title_name1 %}
+			{% endblock %}
+		</div>
+	
+		{% block button1 %}
+		{% endblock %}
+	</div>
+
+	<div class="table_list_item">
+		<table class="table">
+			<thead class="thead-dark">
+				
+                {% block table_head1 %}
+                {% endblock %}
+
+			</thead>
+			<tbody>
+                {% block table_body1 %}
+                {% endblock %}
+			</tbody>
+		</table>
+	</div>
+    {% block confirm_button %}
+    {% endblock %}
+
+</div>
+
+{% endblock content %}

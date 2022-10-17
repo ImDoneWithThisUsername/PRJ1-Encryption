@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.utils.translation import gettext_lazy as _
+import os
+
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, password, **extra_fields):
         if not email:
@@ -46,6 +48,11 @@ def user_directory_path(instance, filename):
     return 'user_{0}/{1}'.format(instance.receiver.id, filename)
 
 class Document(models.Model):
+    receiver = models.ForeignKey(CustomUser, null=True, on_delete=models.SET_NULL, blank=True, related_name='receiver')
     document = models.FileField(upload_to=user_directory_path)
-    sender = models.ForeignKey(CustomUser, null=True, on_delete=models.SET_NULL, blank=True)
-    uploaded_at = models.DateTimeField(auto_now_add=True)
+    sender = models.ForeignKey(CustomUser, null=True, on_delete=models.SET_NULL, blank=True, related_name='sender')
+    sent_at = models.DateTimeField(auto_now_add=True)
+
+    @property
+    def filename(self):
+        return os.path.basename(self.document.name)
