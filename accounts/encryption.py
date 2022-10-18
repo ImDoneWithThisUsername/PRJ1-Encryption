@@ -16,12 +16,11 @@ def encrypt_rsa_private_key(passphrase: str, rsa_private_key: bytes):
    cipherkey, tag = aes_privatekey.encrypt_and_digest(rsa_private_key)
    return cipherkey, tag, aes_privatekey.nonce
 
-def concanate_nonce_tag_cipherkey(cipherkey: bytes, tag: bytes, nonce: bytes):
+def concanate_cipherkey_tag_nonce(cipherkey: bytes, tag: bytes, nonce: bytes):
    res = nonce + tag + cipherkey
    return res
 
-def slide_nonce_tag_cipherkey(cstr: bytes):
-
+def slide_cipherkey_tag_nonce(cstr: bytes):
    nonce, tag, cipherkey = cstr[0:16], cstr[16:32], cstr[32:]
    return cipherkey, tag, nonce
 

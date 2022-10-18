@@ -1,4 +1,3 @@
-from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
@@ -18,7 +17,7 @@ def register(request):
             key = generate_rsa_key()
             cipherkey, tag, nonce = encrypt_rsa_private_key(user.passphrase,key.export_key())
             
-            user.private_key = concanate_nonce_tag_cipherkey(cipherkey, tag, nonce)
+            user.private_key = concanate_cipherkey_tag_nonce(cipherkey, tag, nonce)
             user.public_key = key.public_key().export_key()
 
             user.save()
@@ -98,9 +97,26 @@ def changeInfo(request):
     #submit
     if request.method == 'POST':
         form = ChangeCustomUserForm(request.POST, instance=user)
+        if form.is_valid():
+            #get old passphrase
+            old_passphrase = form.cleaned_data['old_passphrase']
+            verify_user = authenticate(request, email=user.email, password=old_passphrase)
+            if verify_user == None:
+                messages.error(request,'Passphrase cũ không đúng')
+                return redirect('change_info')
+            
+            #get private key
+            cipherkey, tag, nonce = slide_cipherkey_tag_nonce(user.private_key)
+            print('old passphrase: '+old_passphrase)
+            key_decrypt = decrypt_rsa_private_key(old_passphrase, cipherkey, tag, nonce)
 
-    if form.is_valid():
-            form.save()
+            user = form.save()
+            #encrypt private key with new passphrase
+            cipherkey, tag, nonce = encrypt_rsa_private_key(user.passphrase, key_decrypt)
+            user.private_key = concanate_cipherkey_tag_nonce(cipherkey, tag, nonce)
+            
+            user.save()
+
             messages.success(request,'Thay đổi thông tin thành công')
             return redirect('change_info')
 
