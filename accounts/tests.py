@@ -71,9 +71,9 @@ class EncryptionTest(TestCase):
         cipherkey, tag, nonce = encrypt_rsa_private_key(passphrase,key.export_key())
         
         private_key = concanate_cipherkey_tag_nonce(cipherkey, tag, nonce)
-        user = CustomUser.objects.create_user(email="m1@gmail.com", password="123", private_key=private_key)
+        user = CustomUser.objects.create_user(email="m1@gmail.com", password="123", private_key=private_key, passphrase="123")
 
         cipherkey, tag, nonce = slide_cipherkey_tag_nonce(user.private_key)
-        key_decrypt = decrypt_rsa_private_key("123", cipherkey, tag, nonce)
+        key_decrypt = decrypt_rsa_private_key(user.passphrase, cipherkey, tag, nonce)
         
         self.assertEqual(key, RSA.import_key(key_decrypt))

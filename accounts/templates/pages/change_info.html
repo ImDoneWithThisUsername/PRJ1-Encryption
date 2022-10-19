@@ -62,13 +62,17 @@
 			</div>
 
 			<div class="form-outline">
-				<label class="form-label" for="old_passphrase"><b>Passphrase cũ</b></label>
-				{{form.old_passphrase}}
+				<label class="form-label" for="old_password"><b>Password cũ</b></label>
+				{{form.old_password}}
 			</div>
 
 			<div class="form-outline">
-				<label class="form-label" for="passphrase"><b>Passphrase mới</b></label>
-				{{form.passphrase}}
+				<label class="form-label" for="new_password"><b>Password mới</b></label>
+				{{form.password1}}
+			</div>
+			<div class="form-outline">
+				<label class="form-label" for="new_password"><b>Nhập lại password mới</b></label>
+				{{form.password2}}
 			</div>
 
             <div style="margin-top:30px;">
@@ -83,7 +87,6 @@
 
     for (var field in form_fields){	
         form_fields[field].className += ' form-control'
-
     }
 </script>
 

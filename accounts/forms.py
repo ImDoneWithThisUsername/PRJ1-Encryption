@@ -13,7 +13,10 @@ class UploadFileForm(forms.ModelForm):
         fields = ['document']
 
 class ChangeCustomUserForm(forms.ModelForm):
-    old_passphrase = forms.CharField(widget=forms.PasswordInput())
+    old_password = forms.CharField(widget=forms.PasswordInput(),required=False)
+    password1 = forms.CharField(widget=forms.PasswordInput())
+    password2 = forms.CharField(widget=forms.PasswordInput())
+    
     class Meta:
         model = CustomUser
-        fields = ['name', 'birth', 'phone', 'address','old_passphrase', 'passphrase']
+        fields = ['name', 'birth', 'phone', 'address','old_password', 'password1', 'password2']

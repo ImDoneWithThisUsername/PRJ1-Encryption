@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib import messages
 from .models import *
 from .forms import *
@@ -15,8 +15,8 @@ def register(request):
             user = form.save()
 
             key = generate_rsa_key()
-            cipherkey, tag, nonce = encrypt_rsa_private_key(user.passphrase,key.export_key())
-            
+            passphrase = form.clean_password2()
+            cipherkey, tag, nonce = encrypt_rsa_private_key(passphrase,key.export_key())
             user.private_key = concanate_cipherkey_tag_nonce(cipherkey, tag, nonce)
             user.public_key = key.public_key().export_key()
 
@@ -99,24 +99,31 @@ def changeInfo(request):
         form = ChangeCustomUserForm(request.POST, instance=user)
         if form.is_valid():
             #get old passphrase
-            old_passphrase = form.cleaned_data['old_passphrase']
-            verify_user = authenticate(request, email=user.email, password=old_passphrase)
+            old_password = form.cleaned_data['old_password']
+            verify_user = authenticate(request, email=user.email, password=old_password)
             if verify_user == None:
-                messages.error(request,'Passphrase cũ không đúng')
+                messages.error(request,'Password cũ không đúng')
                 return redirect('change_info')
+
+            #verify new password
+            password1 = form.cleaned_data['password1']
+            password2 = form.cleaned_data['password2']
+            if password1 != password2:
+                messages.error(request,'Mật khẩu và xác nhận mật khẩu không giống nhau')
+                return redirect('change_info')
+
             
             #get private key
             cipherkey, tag, nonce = slide_cipherkey_tag_nonce(user.private_key)
-            print('old passphrase: '+old_passphrase)
-            key_decrypt = decrypt_rsa_private_key(old_passphrase, cipherkey, tag, nonce)
-
+            key_decrypt = decrypt_rsa_private_key(old_password, cipherkey, tag, nonce)
+            
             user = form.save()
             #encrypt private key with new passphrase
-            cipherkey, tag, nonce = encrypt_rsa_private_key(user.passphrase, key_decrypt)
+            cipherkey, tag, nonce = encrypt_rsa_private_key(password2, key_decrypt)
             user.private_key = concanate_cipherkey_tag_nonce(cipherkey, tag, nonce)
-            
+            user.set_password(password2)
             user.save()
-
+            update_session_auth_hash(request, user)
             messages.success(request,'Thay đổi thông tin thành công')
             return redirect('change_info')
 
