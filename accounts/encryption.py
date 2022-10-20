@@ -77,6 +77,11 @@ def decrypt_file(file_path: str, key: bytes):
    file_out.close()
    return file_path
 
+def handle_uploaded_file(f):
+   with open('temp.txt', 'wb+') as destination:
+      for chunk in f.chunks():
+         destination.write(chunk)
+
 
 if __name__ == '__main__':
    debug = True

@@ -1,9 +1,13 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+
 from .models import *
 from .forms import *
 from .encryption import *
+
+import os
 
 def register(request):
     form = CreateCustomUserForm()
@@ -17,6 +21,7 @@ def register(request):
             key = generate_rsa_key()
             passphrase = form.clean_password2()
             cipherkey, tag, nonce = encrypt_rsa_private_key(passphrase,key.export_key())
+
             user.private_key = concanate_cipherkey_tag_nonce(cipherkey, tag, nonce)
             user.public_key = key.public_key().export_key()
 
@@ -51,10 +56,12 @@ def loginPage(request):
     context = {}
     return render(request, 'pages/login.html', context)
 
+@login_required(login_url='login')
 def logoutUser(request):
     logout(request)
     return redirect('login')
 
+@login_required(login_url='login')
 def dashboard(request):
     email = request.user
     user = CustomUser.objects.get(email=email)
@@ -65,6 +72,7 @@ def dashboard(request):
 
     return render(request, 'pages/dashboard.html', context)
 
+@login_required(login_url='login')
 def sendFile(request):
     if request.method == 'POST':
         form = UploadFileForm(request.POST, request.FILES)
@@ -79,17 +87,28 @@ def sendFile(request):
                 messages.error(request, 'Không có người nhận với email này.')
                 return redirect('send_file')
 
+            # handle_uploaded_file(request.FILES['temp_document'])
+            # cipherfile = encrypt_file('temp.txt', rec.public_key)
+
             file = form.save(commit=False)
+
             file.receiver = rec
             file.sender = request.user
+            file.save()
+
+            plain_file = file.document.path
+            file.document = encrypt_file(plain_file, rec.public_key)
 
             file.save()
+
+            os.remove(plain_file)
             messages.success(request, 'Gửi file thành công.')
             return redirect('send_file')
     else:
         form = UploadFileForm()
     return render(request, 'pages/send_file.html', {'form': form})
 
+@login_required(login_url='login')
 def changeInfo(request):
     #autofill
     user = request.user

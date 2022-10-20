@@ -8,6 +8,7 @@ class CreateCustomUserForm(UserCreationForm):
         fields = ['email', 'password1', 'password2']
 
 class UploadFileForm(forms.ModelForm):
+    # temp_document = forms.FileField(widget=forms.FileInput())
     class Meta:
         model = Document
         fields = ['document']
