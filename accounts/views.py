@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-
+from django.core.files import File
 from .models import *
 from .forms import *
 from .encryption import *
@@ -148,3 +148,26 @@ def changeInfo(request):
 
     context = {'form':form}
     return render(request, 'pages/change_info.html', context)
+
+@login_required(login_url='login')
+def input_password(request, id):
+    user = request.user
+    plain_file = ""
+    if request.method == "POST":
+
+        password = request.POST['pwd']
+        verify_user = authenticate(request, email=user.email, password=password)
+
+        if verify_user == None:
+            messages.error(request,'Password cũ không đúng')
+            return redirect('dashboard')
+
+        cipherkey, tag, nonce = slide_cipherkey_tag_nonce(user.private_key)
+        key_decrypt = decrypt_rsa_private_key(password, cipherkey, tag, nonce)
+
+        file = Document.objects.get(id=id)
+        decrypt_file(file.document.path, key_decrypt)
+        plain_file = os.path.splitext(file.document.url)[0]
+
+    context = {'plain_file': plain_file}
+    return render(request, "pages/input_password.html", context)
