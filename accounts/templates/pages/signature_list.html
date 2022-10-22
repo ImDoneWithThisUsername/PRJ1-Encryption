@@ -1,0 +1,43 @@
+{% extends 'pages/table_form.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang chủ</title>
+</head>
+<body>
+    {% block title_name %}
+        <p>Danh sách file đã nhận</p>
+    {% endblock title_name %}
+
+
+    {% block table_head %}
+    <tr>
+        <th>Tên tệp</th>
+        <th>Tải xuống</th>
+        <th>Chữ ký</th>
+    </tr>
+
+    {% endblock table_head %}
+    {% block table_body %}
+
+    {% for i in signature %}
+    <tr>
+        <td>{{i.document.name}}</td>
+        <td><a href="{{i.document.url}}" download=""><button class="btn"><i class="fa fa-download"></i></button></a></td>
+        <td>{{i.signature.name}}</td>
+        {% comment %} <td>{{i.sent_at|date:'d-m-Y'}}</td> {% endcomment %}
+        {% comment %} <td><a href="{% url 'input_password' i.id %}" ><button class="btn"><i class="fa fa-download"></i></button></a></td> {% endcomment %}
+
+    </tr>
+    {% endfor %}
+    {% comment %} <a href="{% url ''%}" ></a> {% endcomment %}
+    <a class="btn btn-primary" href="{% url 'upload_signature'%}" >Upload file ký</a>
+    <a href="{% url 'validate_signature'%}" ><button class="btn">Xác nhận</button></a> 
+
+    {% endblock table_body %}
+</body>
+</html>

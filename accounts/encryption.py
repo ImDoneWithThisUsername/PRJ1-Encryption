@@ -87,7 +87,7 @@ def handle_uploaded_file(f):
       for chunk in f.chunks():
          destination.write(chunk)
 
-def sign_file(file_path: str, private_key:bytes) -> bytes:
+def sign_file(file_path: str, private_key:bytes):
 
    sha256 = SHA256.new()
 

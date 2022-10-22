@@ -24,6 +24,14 @@ class ChangeCustomUserForm(forms.ModelForm):
 
 
 class UploadSignatureDocumentForm(forms.ModelForm):
+    password = forms.CharField(widget=forms.PasswordInput())
     class Meta:
         model = SignatureDocument
+        fields = ['document','password']
+
+
+        
+class UploadValidateDocumentForm(forms.ModelForm):
+    class Meta:
+        model = ValidateDocument
         fields = ['document']

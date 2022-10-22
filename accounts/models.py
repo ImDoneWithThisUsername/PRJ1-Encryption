@@ -59,5 +59,8 @@ class Document(models.Model):
         return os.path.basename(self.document.name)
 
 class SignatureDocument(models.Model):
-    document = models.FileField(upload_to="signature_document/")
     signature = models.FileField(upload_to="signature_document/")
+    document = models.FileField(upload_to="signature_document/")
+
+class ValidateDocument(models.Model):
+    document = models.FileField(upload_to="validate_document/")

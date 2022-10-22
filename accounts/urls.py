@@ -11,6 +11,10 @@ urlpatterns = [
    path('send_file/', views.sendFile, name='send_file'),
    path('change_info/', views.changeInfo, name='change_info'),
    path('input_password/<int:id>', views.input_password, name='input_password'),
+   path('upload_signature/', views.upload_signature, name='upload_signature'),
+   path('validate_signature/', views.validate_signature, name='validate_signature'),
+   path('signature_list/', views.signature_list, name='signature_list'),
+   
    
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

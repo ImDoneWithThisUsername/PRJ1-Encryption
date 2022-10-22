@@ -10,8 +10,6 @@ class EncryptionTest(TestCase):
 
     def test_verify_data_case_true(self):
         key = generate_rsa_key()
-        print(key.export_key())
-        print(key.public_key().export_key())
         sig_file_path = sign_file('test.txt', key.export_key())
         result = verify_sig(sig_file_path, 'test.txt', key.public_key().export_key())
         self.assertEqual(result, True)

@@ -1,0 +1,41 @@
+{% extends 'pages/main.html' %}
+{% load static %}
+
+{% block style %}
+    .a{
+        margin: auto;
+        margin-top:30px;
+        padding: 20px;
+        background: white ;
+        border-radius:5px;
+        width:40%;
+        text-align: center;
+    }
+{% endblock style %}
+
+{% block content %}
+
+{% if messages %}
+{% for message in messages %}
+  <div class="alert {{ message.tags }} alert-dismissible" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    {{ message }}
+  </div>
+{% endfor %}
+{% endif %}
+
+<div class="a" >
+  <form class="row g-3" method="POST" action="" enctype="multipart/form-data" style="margin-top: 30px;">
+    {% csrf_token %}
+    <div class="form-outline" >
+      <label for="form2Example17" class="form-label" >Upload file cần ký:</label>
+    </div>
+    {{ form.as_p }}
+    <div style="height:200px">
+      <input class="btn btn-primary trigger-btn" style="font-size:18px; width: 100px;" type="submit" name="update" value="Gửi">
+    </div>
+  </form>
+</div>  
+{% endblock content %}

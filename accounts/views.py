@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.core.files import File
+from django.conf import settings
 from .models import *
 from .forms import *
 from .encryption import *
@@ -162,7 +162,7 @@ def input_password(request, id):
 
         if verify_user == None:
             messages.error(request,'Password cũ không đúng')
-            return redirect('dashboard')
+            return redirect('input_password')
 
         cipherkey, tag, nonce = slide_cipherkey_tag_nonce(user.private_key)
         key_decrypt = decrypt_rsa_private_key(password, cipherkey, tag, nonce)
@@ -174,19 +174,66 @@ def input_password(request, id):
     context = {'plain_file': plain_file}
     return render(request, "pages/input_password.html", context)
 
+@login_required(login_url='login')
+def upload_signature(request):
+    if request.method == 'POST':
+        form = UploadSignatureDocumentForm(request.POST, request.FILES)
+        user = request.user
+        if form.is_valid():
 
-# @login_required(login_url='login')
-# def sendFile(request):
-#     if request.method == 'POST':
-#         form = UploadSignatureDocumentForm(request.POST, request.FILES)
+            file = form.save(commit=False)
 
-#         if form.is_valid():
+            password = form.cleaned_data['password']
+            verify_user = authenticate(request, email=user.email, password=password)
 
-#             file = form.save(commit=False)
-#             file.save()
+            if verify_user == None:
+                messages.error(request,'Password không đúng')
+                return redirect('upload_signature')
+
+            cipherkey, tag, nonce = slide_cipherkey_tag_nonce(user.private_key)
+            key_decrypt = decrypt_rsa_private_key(password, cipherkey, tag, nonce)
+            file.save()
+
+            path = sign_file(file.document.path, key_decrypt)
+            file.signature = file.document.name+".sig"
+
+            file.save()
             
-#             messages.success(request, 'Gửi file thành công.')
-#             return redirect('dashboard')
-#     else:
-#         form = UploadSignatureDocumentForm()
-#     return render(request, 'pages/send_signature_file.html', {'form': form})
+            messages.success(request, 'Gửi file thành công.')
+            return redirect('upload_signature')
+    else:
+        form = UploadSignatureDocumentForm()
+    return render(request, 'pages/upload_signature_file.html', {'form': form})
+
+@login_required(login_url='login')
+def validate_signature(request):
+    signed_user = None
+    if request.method == 'POST':
+        form = UploadValidateDocumentForm(request.POST, request.FILES)
+        all_sig = SignatureDocument.objects.all()
+        # @TODO catch case sig not exists
+        if form.is_valid():
+            file = form.save(commit=False)
+            file.save()
+            users = CustomUser.objects.all()
+            for user in users:
+                for sig in all_sig:
+                    if verify_sig(sig.signature.path, file.document.path, user.public_key):
+                        signed_user = user
+                        messages.success(request, 'Chữ ký hợp lệ, do {} đã ký'.format(signed_user.email))
+                        return redirect('validate_signature')
+
+            messages.success(request, 'Không xác nhận được chữ ký')
+            return redirect('validate_signature')
+    else:
+        form = UploadValidateDocumentForm()
+    return render(request, 'pages/validate_file.html', {'form': form, 'signed_user': signed_user})
+
+@login_required(login_url='login')
+def signature_list(request):
+    signature = SignatureDocument.objects.all()
+    context = {
+        'signature':signature
+    }
+
+    return render(request, 'pages/signature_list.html', context)
