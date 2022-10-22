@@ -119,30 +119,31 @@ def changeInfo(request):
     if request.method == 'POST':
         form = ChangeCustomUserForm(request.POST, instance=user)
         if form.is_valid():
-            #get old passphrase
-            old_password = form.cleaned_data['old_password']
-            verify_user = authenticate(request, email=user.email, password=old_password)
-            if verify_user == None:
-                messages.error(request,'Password cũ không đúng')
-                return redirect('change_info')
+            if form.cleaned_data['password1'] or form.cleaned_data['password2']:
+                #get old passphrase
+                old_password = form.cleaned_data['old_password']
+                verify_user = authenticate(request, email=user.email, password=old_password)
+                if verify_user == None:
+                    messages.error(request,'Password cũ không đúng')
+                    return redirect('change_info')
 
-            #verify new password
-            password1 = form.cleaned_data['password1']
-            password2 = form.cleaned_data['password2']
-            if password1 != password2:
-                messages.error(request,'Mật khẩu và xác nhận mật khẩu không giống nhau')
-                return redirect('change_info')
+                #verify new password
+                password1 = form.cleaned_data['password1']
+                password2 = form.cleaned_data['password2']
+                if password1 != password2:
+                    messages.error(request,'Mật khẩu và xác nhận mật khẩu không giống nhau')
+                    return redirect('change_info')
 
-            
-            #get private key
-            cipherkey, tag, nonce = slide_cipherkey_tag_nonce(user.private_key)
-            key_decrypt = decrypt_rsa_private_key(old_password, cipherkey, tag, nonce)
-            
-            user = form.save()
-            #encrypt private key with new passphrase
-            cipherkey, tag, nonce = encrypt_rsa_private_key(password2, key_decrypt)
-            user.private_key = concanate_cipherkey_tag_nonce(cipherkey, tag, nonce)
-            user.set_password(password2)
+                
+                #get private key
+                cipherkey, tag, nonce = slide_cipherkey_tag_nonce(user.private_key)
+                key_decrypt = decrypt_rsa_private_key(old_password, cipherkey, tag, nonce)
+                
+                user = form.save()
+                #encrypt private key with new passphrase
+                cipherkey, tag, nonce = encrypt_rsa_private_key(password2, key_decrypt)
+                user.private_key = concanate_cipherkey_tag_nonce(cipherkey, tag, nonce)
+                user.set_password(password2)
             user.save()
             update_session_auth_hash(request, user)
             messages.success(request,'Thay đổi thông tin thành công')

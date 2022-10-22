@@ -15,8 +15,8 @@ class UploadFileForm(forms.ModelForm):
 
 class ChangeCustomUserForm(forms.ModelForm):
     old_password = forms.CharField(widget=forms.PasswordInput(),required=False)
-    password1 = forms.CharField(widget=forms.PasswordInput())
-    password2 = forms.CharField(widget=forms.PasswordInput())
+    password1 = forms.CharField(widget=forms.PasswordInput(), required=False)
+    password2 = forms.CharField(widget=forms.PasswordInput(), required=False)
     
     class Meta:
         model = CustomUser
