@@ -21,3 +21,9 @@ class ChangeCustomUserForm(forms.ModelForm):
     class Meta:
         model = CustomUser
         fields = ['name', 'birth', 'phone', 'address','old_password', 'password1', 'password2']
+
+
+class UploadSignatureDocumentForm(forms.ModelForm):
+    class Meta:
+        model = SignatureDocument
+        fields = ['document']

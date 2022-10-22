@@ -1,7 +1,12 @@
 from Crypto.PublicKey import RSA
 from Crypto.Random import get_random_bytes
 from Crypto.Cipher import AES, PKCS1_OAEP
+from Crypto.Signature import PKCS1_v1_5
+from Crypto.Hash import SHA256
+
 import hashlib
+
+BUF_SIZE = 65536  # lets read stuff in 64kb chunks!
 
 def generate_rsa_key():
    key = RSA.generate(2048)
@@ -81,6 +86,46 @@ def handle_uploaded_file(f):
    with open('temp.txt', 'wb+') as destination:
       for chunk in f.chunks():
          destination.write(chunk)
+
+def sign_file(file_path: str, private_key:bytes) -> bytes:
+
+   sha256 = SHA256.new()
+
+   recipient_key = RSA.import_key(private_key)
+   signer = PKCS1_v1_5.new(recipient_key)
+   # cipher_rsa = PKCS1_OAEP.new(private_key)
+
+   with open(file_path, 'rb') as f:
+      while True:
+         data = f.read(BUF_SIZE)
+         if not data:
+            break
+         sha256.update(data)
+
+   with open(file_path+".sig",'wb') as sig_file:
+      sig_file.write(signer.sign(sha256))
+   return file_path+".sig"
+
+def verify_sig(sig_file_path: str, plain_file_path:str, pub_key: bytes) -> bool:
+
+   sha256 = SHA256.new()
+
+   recipient_key = RSA.import_key(pub_key)
+   signer = PKCS1_v1_5.new(recipient_key)
+
+   with open(sig_file_path, 'rb') as sig_file, open(plain_file_path,'rb') as plain_file:
+      # hash plain_file
+      while True:
+         data = plain_file.read(BUF_SIZE)
+         if not data:
+            break
+         sha256.update(data)
+
+      # decrypt sig_file
+      sig_data = sig_file.read()
+
+   return signer.verify(sha256, sig_data)
+
 
 
 if __name__ == '__main__':

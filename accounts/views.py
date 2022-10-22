@@ -26,6 +26,7 @@ def register(request):
             user.public_key = key.public_key().export_key()
 
             user.save()
+            print(user.password)
             messages.success(request, 'Tạo tài khoản thành công.')
             return redirect('login')
 
@@ -113,6 +114,7 @@ def changeInfo(request):
     #autofill
     user = request.user
     form = ChangeCustomUserForm(instance=user)
+    print(user.birth)
     #submit
     if request.method == 'POST':
         form = ChangeCustomUserForm(request.POST, instance=user)
@@ -171,3 +173,20 @@ def input_password(request, id):
 
     context = {'plain_file': plain_file}
     return render(request, "pages/input_password.html", context)
+
+
+# @login_required(login_url='login')
+# def sendFile(request):
+#     if request.method == 'POST':
+#         form = UploadSignatureDocumentForm(request.POST, request.FILES)
+
+#         if form.is_valid():
+
+#             file = form.save(commit=False)
+#             file.save()
+            
+#             messages.success(request, 'Gửi file thành công.')
+#             return redirect('dashboard')
+#     else:
+#         form = UploadSignatureDocumentForm()
+#     return render(request, 'pages/send_signature_file.html', {'form': form})
