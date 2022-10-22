@@ -61,7 +61,6 @@ class Document(models.Model):
 class SignatureDocument(models.Model):
     signature = models.FileField(upload_to="signature_document/")
     document = models.FileField(upload_to="signature_document/")
-    user = models.ForeignKey(CustomUser, null=True, on_delete=models.SET_NULL, blank=True)
 
     @property
     def filename(self):

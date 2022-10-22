@@ -195,9 +195,9 @@ def upload_signature(request):
             key_decrypt = decrypt_rsa_private_key(password, cipherkey, tag, nonce)
             file.save()
 
-            path = sign_file(file.document.path, key_decrypt)
+            sign_file(file.document.path, key_decrypt)
             file.signature = file.document.name+".sig"
-            file.user = request.user
+            print(file.signature)
             file.save()
             
             messages.success(request, 'Gửi file thành công.')
@@ -219,6 +219,7 @@ def validate_signature(request):
             users = CustomUser.objects.all()
             for user in users:
                 for sig in all_sig:
+                    print(sig.signature.path)
                     if verify_sig(sig.signature.path, file.document.path, user.public_key):
                         signed_user = user
                         messages.success(request, 'Chữ ký hợp lệ, do {} đã ký'.format(signed_user.email))
@@ -232,9 +233,7 @@ def validate_signature(request):
 
 @login_required(login_url='login')
 def signature_list(request):
-    email = request.user
-    user = CustomUser.objects.get(email=email)
-    signature = SignatureDocument.objects.filter(user=user)
+    signature = SignatureDocument.objects.all()
     context = {
         'signature':signature
     }
