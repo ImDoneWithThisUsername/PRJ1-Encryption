@@ -61,6 +61,15 @@ class Document(models.Model):
 class SignatureDocument(models.Model):
     signature = models.FileField(upload_to="signature_document/")
     document = models.FileField(upload_to="signature_document/")
+    user = models.ForeignKey(CustomUser, null=True, on_delete=models.SET_NULL, blank=True)
+
+    @property
+    def filename(self):
+        return os.path.basename(self.document.name)
+
+    @property
+    def signame(self):
+        return os.path.basename(self.signature.name)
 
 class ValidateDocument(models.Model):
     document = models.FileField(upload_to="validate_document/")

@@ -196,7 +196,7 @@ def upload_signature(request):
 
             path = sign_file(file.document.path, key_decrypt)
             file.signature = file.document.name+".sig"
-
+            file.user = request.user
             file.save()
             
             messages.success(request, 'Gửi file thành công.')
@@ -231,7 +231,9 @@ def validate_signature(request):
 
 @login_required(login_url='login')
 def signature_list(request):
-    signature = SignatureDocument.objects.all()
+    email = request.user
+    user = CustomUser.objects.get(email=email)
+    signature = SignatureDocument.objects.filter(user=user)
     context = {
         'signature':signature
     }

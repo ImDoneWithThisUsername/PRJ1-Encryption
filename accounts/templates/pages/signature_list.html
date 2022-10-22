@@ -6,11 +6,11 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trang chủ</title>
+    <title>Danh sách file ký</title>
 </head>
 <body>
     {% block title_name %}
-        <p>Danh sách file đã nhận</p>
+        <p>Danh sách file ký</p>
     {% endblock title_name %}
 
 
@@ -26,9 +26,9 @@
 
     {% for i in signature %}
     <tr>
-        <td>{{i.document.name}}</td>
+        <td>{{i.filename}}</td>
         <td><a href="{{i.document.url}}" download=""><button class="btn"><i class="fa fa-download"></i></button></a></td>
-        <td>{{i.signature.name}}</td>
+        <td>{{i.signame}}</td>
         {% comment %} <td>{{i.sent_at|date:'d-m-Y'}}</td> {% endcomment %}
         {% comment %} <td><a href="{% url 'input_password' i.id %}" ><button class="btn"><i class="fa fa-download"></i></button></a></td> {% endcomment %}
 
@@ -36,7 +36,7 @@
     {% endfor %}
     {% comment %} <a href="{% url ''%}" ></a> {% endcomment %}
     <a class="btn btn-primary" href="{% url 'upload_signature'%}" >Upload file ký</a>
-    <a href="{% url 'validate_signature'%}" ><button class="btn">Xác nhận</button></a> 
+    <a href="{% url 'validate_signature'%}" ><button class="btn">Xác nhận chữ ký</button></a> 
 
     {% endblock table_body %}
 </body>
